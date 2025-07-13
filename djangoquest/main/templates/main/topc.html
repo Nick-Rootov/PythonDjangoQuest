@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+    <h1>Топ 10 цитат</h1>
+    {% for el in tasks %}
+        <div class="alert alert-warning mt-2">
+            <h3>{{ el.title }}</h3>
+            <p>{{ el.film }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
