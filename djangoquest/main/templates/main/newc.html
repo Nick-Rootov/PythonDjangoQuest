@@ -10,6 +10,17 @@
         {% csrf_token %}
         {{ form.title }}<br>
         {{ form.film }}<br>
+        <div>
+          <input
+            type="range"
+            id="weight"
+            name="weight"
+            min="1"
+            max="100"
+            value="1"
+            step="1" />
+          <label for="weight">Вес цитаты</label>
+        </div>
         <button type="submit" class="btn btn-success">Добавить</button>
         <span>{{ error }}</span>
     </form>

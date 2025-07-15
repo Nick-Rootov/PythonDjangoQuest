@@ -6,9 +6,11 @@
 {% block content %}
     <h1>Топ 10 цитат</h1>
     {% for el in tasks %}
-        <div class="alert alert-warning mt-2">
-            <h3>{{ el.title }}</h3>
-            <p>{{ el.film }}</p>
+        <div class="bg-body-tertiary p-3 rounded">
+            <h3>{{ el.film }}</h3>
+            <br>
+            <p class="lead" style="font-style: italic;">"{{ el.title }}"</p>
         </div>
+        <br>
     {% endfor %}
 {% endblock %}

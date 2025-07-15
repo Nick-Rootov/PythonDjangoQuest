@@ -1,14 +1,19 @@
 from django.shortcuts import render,redirect
 from .models import Citation
 from .forms import CitationForm
-import random
+import numpy as np
 
 
 def index(request):
 
-    cit = Citation.objects.all()
-    #return render(request, 'main/index.html', {'title': 'Главная страница', 'tasks': cit})
-    return render(request, 'main/index.html', { 'tasks': cit })
+    cit_ids = np.array(Citation.objects.values_list('id', flat=True))
+    cit_weight_int = np.array(Citation.objects.values_list('weight', flat=True))
+    cit_weight_float = cit_weight_int.astype(float)
+    cit_weight_float = cit_weight_float/np.sum(cit_weight_float)
+    element = np.random.choice(cit_ids, p=cit_weight_float)
+    cit = Citation.objects.get(id=element)
+
+    return render(request, 'main/index.html', { 'cit_ids': cit_ids,'cit_weight': cit_weight_float, 'element':element, 'cit': cit })
 
 def newc(request):
     error = ''
@@ -19,6 +24,7 @@ def newc(request):
             return redirect('home')
         else:
             error = 'Форма была неверной'
+
     form = CitationForm()
     context = {
         'form': form,

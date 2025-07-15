@@ -5,7 +5,7 @@ from django.forms import ModelForm, TextInput, Textarea
 class CitationForm(ModelForm):
     class Meta:
         model = Citation
-        fields = ["title", "film"]
+        fields = ["title", "film", "weight"]
         widgets = {
             "title": Textarea(attrs={
                 'class': 'form-control',
