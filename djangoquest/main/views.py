@@ -21,7 +21,7 @@ def index(request):
     if request.user.is_authenticated:
         is_liked = Like.objects.filter(cit=select_cit, user=request.user).exists()
     elif not request.session.session_key:
-        is_liked = Like.objects.filter(cit=select_cit, session_id=request.session.session_id).exists()
+        is_liked = Like.objects.filter(cit=select_cit, session_id=request.session.session_key).exists()
 
     if not request.session.get(session_key, False):
         select_cit.views += 1
