@@ -10,9 +10,43 @@
         <div class="p-4 p-md-5 mb 4 rounded text-body-emphasis bg-body-secondary">
             <h3 class="display-4 fst-italic">"{{ cit.title }}"</h3><br>
             <div class="d-flex justify-content-between align-items-center">
-                <button type="submit" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">Like</button>
+                <button id="like-btn"
+                        onclick="sendLike(this)"
+                        data-post-id="{{ cit.id }}"
+                        class="btn rounded-circle p-3 lh-1  {% if not is_liked %} btn-outline-primary {% endif %}{% if is_liked %} btn-primary {% endif %}">
+                ♥ <span class="like-count">{{ cit.total_likes }}</span>  <!-- Иконка и счетчик -->
+                </button>
                 <small class="lead my-3">{{ cit.film }}</small>
             </div>
+            <br>
+            <footer class="blockquote-footer" style="text-align: left;">Просмотров: {{ cit.views }}</footer>
         </div>
     </section>
+
+<script>
+function sendLike(button) {
+    const postId = button.dataset.postId;
+
+    fetch('/like/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `post_id=${postId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.is_liked) {
+            button.classList.add('btn-primary');
+            button.classList.remove('btn-outline-primary');
+        } else {
+            button.classList.add('btn-outline-primary');
+            button.classList.remove('btn-primary');
+        }
+        button.querySelector('.like-count').textContent = data.total_likes;
+    });
+}
+</script>
+
 {% endblock %}
