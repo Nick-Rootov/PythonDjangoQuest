@@ -17,10 +17,10 @@ def index(request):
     is_liked = False
     session_key = f'post_{select_cit.id}_viewed'
 
-
+    #Отслеживаем начальное состояние лайка
     if request.user.is_authenticated:
         is_liked = Like.objects.filter(cit=select_cit, user=request.user).exists()
-    elif not request.session.session_key:
+    elif request.session.session_key:
         is_liked = Like.objects.filter(cit=select_cit, session_id=request.session.session_key).exists()
 
     if not request.session.get(session_key, False):
@@ -80,6 +80,7 @@ def handle_like(request):
 
 def newc(request):
     error = ''
+    #Отслеживаем POST
     if request.method == "POST":
         form = CitationForm(request.POST)
         if form.is_valid():
@@ -88,6 +89,7 @@ def newc(request):
             if count_film>=3:
                 error = '!!!  Уже существует 3 цитаты по этому произведению'
             else:
+                # Поиск дубликата новой цитаты
                 dd = True
                 for single_cit in new_cit:
                     if single_cit.title == form.instance.title:
@@ -112,6 +114,7 @@ def newc(request):
 
 
 def topc(request):
+    #Выводим топ 10 цитат отсортированные по лайкам ( если всего цитат меньше 10, то выводим нужное кол-во)
     count_cit = Citation.objects.count()
     if count_cit >=10:
         count_cit = 10
